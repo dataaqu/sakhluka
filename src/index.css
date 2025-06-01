@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* Minimal reset to test Tailwind */
+* {
+  box-sizing: border-box;
+}
