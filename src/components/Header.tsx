@@ -60,7 +60,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-zinc-900 backdrop-blur-sm shadow-sm p-6">
+      <header className="sticky top-0 z-50 w-full bg-zinc-950 backdrop-blur-sm shadow-sm p-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
