@@ -82,8 +82,8 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
     ignoreCancelEvents: false,
     spyThrottle: 500,
     delay: 100,
-    hashSpy: true,
-    saveHashHistory: true,
+    hashSpy: false,
+    saveHashHistory: false,
   }
 
   // Mobile-specific scroll configuration

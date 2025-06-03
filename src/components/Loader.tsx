@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import CustomCursor from './CustomCursor';
 
 // Import all images that need to be preloaded
 import cov3 from '../assets/cov3.jpg';
@@ -112,74 +111,16 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
     }
   };
 
-  const particleVariants = {
-    animate: {
-      y: [0, -100],
-      opacity: [0, 1, 0],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
   return (
     <AnimatePresence>
       {!isComplete && (
         <motion.div
-          className="fixed inset-0 z-[100] bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 flex items-center justify-center cursor-none"
+          className="fixed inset-0 z-[100] bg-slate-950 flex items-center justify-center"
           variants={containerVariants}
           initial="initial"
           exit="exit"
         >
-          <CustomCursor />
           
-          {/* Animated background particles */}
-          <div className="absolute inset-0 overflow-hidden">
-            {[...Array(30)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute w-1 h-1 bg-white/20 rounded-full"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: '100%',
-                }}
-                variants={particleVariants}
-                animate="animate"
-                transition={{
-                  delay: Math.random() * 2,
-                  duration: 2 + Math.random() * 3,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-            ))}
-            
-            {/* Additional moving elements */}
-            {[...Array(5)].map((_, i) => (
-              <motion.div
-                key={`line-${i}`}
-                className="absolute h-px bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                style={{
-                  width: `${50 + Math.random() * 100}px`,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  x: ['-100px', '100vw'],
-                  opacity: [0, 1, 0]
-                }}
-                transition={{
-                  duration: 3 + Math.random() * 2,
-                  repeat: Infinity,
-                  delay: Math.random() * 2,
-                  ease: "linear"
-                }}
-              />
-            ))}
-          </div>
-
           <div className="relative z-10 text-center">
             {/* Logo/Brand */}
             <motion.div
@@ -365,35 +306,7 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
             </AnimatePresence>
           </div>
 
-          {/* Corner decorations */}
-          <div className="absolute top-8 left-8">
-            <motion.div
-              className="w-16 h-16 border-l-2 border-t-2 border-white/20"
-              animate={{
-                opacity: [0.2, 0.8, 0.2]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          </div>
-          
-          <div className="absolute bottom-8 right-8">
-            <motion.div
-              className="w-16 h-16 border-r-2 border-b-2 border-white/20"
-              animate={{
-                opacity: [0.2, 0.8, 0.2]
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                delay: 1.5,
-                ease: "easeInOut"
-              }}
-            />
-          </div>
+         
         </motion.div>
       )}
     </AnimatePresence>
