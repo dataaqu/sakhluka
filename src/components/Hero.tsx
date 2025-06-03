@@ -7,12 +7,18 @@ import {
 } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
 import { Link } from "react-scroll";
-
 import { useRef } from "react";
+
+// Import all images
+import cov3 from "../assets/cov3.jpg";
+import img1 from "../assets/1.jpg";
+import img2 from "../assets/2.jpg";
+import img3 from "../assets/3.jpg";
+import img5 from "../assets/4.jpg";
 
 export const SmoothScrollHero = () => {
   return (
-    <div className="bg-zinc-950">
+    <div className="bg-background transition-colors duration-300">
       <ReactLenis
         root
         options={{
@@ -89,7 +95,7 @@ const CenterImage = () => {
         backgroundSize,
         opacity,
         backgroundImage:
-          "url(src/assets/cov3.jpg)",
+          `url(${cov3})`,
         backgroundPosition: "cover center",
         backgroundRepeat: "no-repeat",
       }}
@@ -124,7 +130,7 @@ const CenterImageMobile = () => {
         backgroundSize,
         opacity,
         backgroundImage:
-          "url(src/assets/cov3.jpg)",
+          `url(${cov3})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
       }}
@@ -137,7 +143,7 @@ const ParallaxImages = () => {
     <div className="mx-auto max-w-5xl px-4 pt-[100px] md:pt-[200px]">
       {/* First image - always visible */}
       <ParallaxImg
-        src="src/assets/1.jpg"
+        src={img1}
         alt="Mountain cabin view"
         start={-200}
         end={200}
@@ -146,7 +152,7 @@ const ParallaxImages = () => {
       
       {/* Second image - always visible */}
       <ParallaxImg
-        src="src/assets/2.jpg"
+        src={img2}
         alt="Racha landscape"
         start={200}
         end={-250}
@@ -156,14 +162,14 @@ const ParallaxImages = () => {
       {/* Third and fourth images - hidden on mobile to reduce scroll */}
       <div className="hidden md:block">
         <ParallaxImg
-          src="src/assets/3.jpg"
+          src={img3}
           alt="Nature surrounding"
           start={-200}
           end={200}
           className="ml-auto w-1/3"
         />
         <ParallaxImg
-          src="src/assets/5.jpg"
+          src={img5}
           alt="Cabin exterior"
           start={0}
           end={-500}
@@ -179,7 +185,7 @@ const ParallaxImagesMobile = () => {
     <div className="mx-auto max-w-5xl px-4 pt-[100px]">
       {/* Only show 2 images on mobile to reduce scroll */}
       <ParallaxImg
-        src="src/assets/1.jpg"
+        src={img1}
         alt="Mountain cabin view"
         start={-100}
         end={100}
@@ -187,7 +193,7 @@ const ParallaxImagesMobile = () => {
       />
       
       <ParallaxImg
-        src="src/assets/2.jpg"
+        src={img2}
         alt="Racha landscape"
         start={100}
         end={-100}
@@ -238,7 +244,7 @@ const FloatingScrollButton = () => {
         offset={-100}
         duration={1800}
         delay={200}
-        className="bg-zinc-800/90 backdrop-blur-sm text-white p-4 rounded-full shadow-lg hover:bg-zinc-700 transition-all duration-300 cursor-pointer flex items-center justify-center"
+        className="bg-secondary/90 backdrop-blur-sm text-secondary-foreground border border-border p-4 rounded-full shadow-lg hover:bg-accent hover:text-accent-foreground transition-all duration-300 cursor-pointer flex items-center justify-center"
       >
         <FiChevronDown className="w-6 h-6 animate-bounce" />
       </Link>
@@ -250,13 +256,13 @@ const Schedule = () => {
   return (
     <section
       id="about-cabin"
-      className="mx-auto max-w-5xl px-4 py-16 md:py-48 text-white"
+      className="mx-auto max-w-5xl px-4 py-16 md:py-48 text-foreground"
     >
       <motion.h1
         initial={{ y: 48, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ ease: "easeInOut", duration: 0.75 }}
-        className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-zinc-50 text-center"
+        className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-foreground text-center"
       >
         Welcome to Sakhluka in Racha
       </motion.h1>
@@ -266,7 +272,7 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
-          className="text-base md:text-lg leading-relaxed text-zinc-200"
+          className="text-base md:text-lg leading-relaxed text-muted-foreground"
         >
           Nestled in the heart of Racha's majestic mountains, our cabin offers a peaceful retreat surrounded by pristine nature, fresh air, and breathtaking views. Whether you're seeking a quiet getaway or an adventure-filled stay, our cozy cabin is the perfect base.
         </motion.p>
@@ -275,7 +281,7 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.4 }}
-          className="text-base md:text-lg leading-relaxed text-zinc-200"
+          className="text-base md:text-lg leading-relaxed text-muted-foreground"
         >
           Wake up to the sound of rustling trees, enjoy coffee with a view, and unwind by the fireplace after a day of exploring Racha's hidden gems. Designed for comfort and simplicity, the cabin blends rustic charm with modern essentials to make your stay unforgettable.
         </motion.p>
@@ -284,7 +290,7 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.6 }}
-          className="text-lg md:text-xl font-semibold text-zinc-50 text-center pt-4 md:pt-8"
+          className="text-lg md:text-xl font-semibold text-foreground text-center pt-4 md:pt-8"
         >
           Come experience the soul of the Caucasus — calm, clean, and completely yours.
         </motion.p>

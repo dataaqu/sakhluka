@@ -51,7 +51,7 @@ const StickyImage: React.FC<{ imgUrl: string }> = ({ imgUrl }) => {
       className="sticky z-0 overflow-hidden rounded-3xl"
     >
       <motion.div
-        className="absolute inset-0 bg-neutral-950/70"
+        className="absolute inset-0 bg-background/70 dark:bg-foreground/70"
         style={{
           opacity,
         }}
@@ -80,12 +80,12 @@ const OverlayCopy: React.FC<{ subheading: string; heading: string }> = ({
         opacity,
       }}
       ref={targetRef}
-      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center text-white"
+      className="absolute left-0 top-0 flex h-screen w-full flex-col items-center justify-center"
     >
-      <p className="mb-2 text-center text-xl md:mb-4 md:text-3xl">
+      <p className="mb-2 text-center text-xl md:mb-4 md:text-5xl text-white">
         {subheading}
       </p>
-      <p className="text-center text-4xl font-bold md:text-7xl">{heading}</p>
+      <p className="text-center text-4xl font-bold md:text-8xl text-white">{heading}</p>
     </motion.div>
   );
 };
@@ -94,11 +94,11 @@ const ExampleContent: React.FC = () => (
   <div className="mx-auto  max-w-5xl  gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
     
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl text-neutral-600 md:text-3xl">
+      <p className="mb-4 text-xl text-muted-foreground md:text-3xl">
 Surrounded by forest paths, mountain streams, and the quiet rhythm of nature, Sakhluka invites you to truly slow down. Spend your days exploring nearby trails or simply lounging in the sun-drenched yard with a good book. Evenings are perfect for gathering around the outdoor fire, sharing stories, and watching the stars light up the sky.
 
       </p>
-      <p className="mb-8 text-xl text-neutral-600 md:text-3xl">
+      <p className="mb-8 text-xl text-muted-foreground md:text-3xl">
 Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and make space for peace, comfort, and unforgettable mountain moments.
 
 
@@ -109,7 +109,7 @@ Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and
 
 
       </p>
-      <button className="w-full rounded bg-neutral-900 px-9 py-4 text-xl text-white transition-colors hover:bg-neutral-700 md:w-fit">
+      <button className="w-full rounded bg-primary px-9 py-4 text-xl text-primary-foreground transition-colors hover:bg-primary/90 md:w-fit">
         Book Your Stay <FiArrowUpRight className="inline" />
       </button>
     </div>
@@ -118,7 +118,7 @@ Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and
 
 const About: React.FC = () => {
   return (
-    <div id="about" className="bg-white">
+    <div id="about" className="bg-background transition-colors duration-300">
       <TextParallaxContent
         imgUrl={mountainImage}
         subheading="Discover"

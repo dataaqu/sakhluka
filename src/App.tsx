@@ -1,12 +1,42 @@
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from './components/Header'
 import { SmoothScrollHero } from './components/Hero'
 import About from './components/About'
-
-
-
+import Loader from './components/Loader'
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true)
+  const [theme, setTheme] = useState('dark')
+
+  // Theme initialization and persistence
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('sakhluka-theme') || 'dark'
+    setTheme(savedTheme)
+    
+    // Apply theme to document
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [])
+
+  // Theme change handler
+  const handleThemeChange = (newTheme: string) => {
+    setTheme(newTheme)
+    localStorage.setItem('sakhluka-theme', newTheme)
+    
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
+  const handleLoadComplete = () => {
+    setIsLoading(false)
+  }
 
   // Animation variants for sections
   const sectionVariants = {
@@ -57,18 +87,27 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 scroll-smooth">
-      <Header />
-    
-     
+    <>
+      {/* Show loader while images are loading */}
+      {isLoading && <Loader onLoadComplete={handleLoadComplete} />}
       
-      <SmoothScrollHero />
+      {/* Main app content */}
+      {!isLoading && (
+        <motion.div 
+          className="min-h-screen bg-background text-foreground scroll-smooth transition-colors duration-300"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        >
+          <Header theme={theme} onThemeChange={handleThemeChange} />
+          
+          <SmoothScrollHero />
 
      <About />
       {/* Gallery Section */}
       <motion.section 
         id="gallery" 
-        className="min-h-screen flex items-center justify-center bg-gray-100 relative"
+        className="min-h-screen flex items-center justify-center bg-muted/30 relative"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -79,18 +118,18 @@ function App() {
           variants={containerVariants}
         >
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
             variants={contentVariants}
             whileHover={{ 
               scale: 1.05,
-              color: "#059669",
+              color: theme === 'dark' ? "#10b981" : "#059669",
               transition: { duration: 0.3 }
             }}
           >
             Gallery
           </motion.h2>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-600 leading-relaxed"
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed"
             variants={contentVariants}
             whileHover={{
               scale: 1.02,
@@ -108,7 +147,7 @@ function App() {
             {[1, 2, 3, 4, 5, 6].map((item) => (
               <motion.div
                 key={item}
-                className="h-32 bg-gradient-to-br from-green-200 to-blue-200 rounded-lg"
+                className="h-32 bg-gradient-to-br from-emerald-200/80 to-blue-200/80 dark:from-emerald-800/40 dark:to-blue-800/40 rounded-lg border border-border"
                 variants={contentVariants}
                 whileHover={{
                   scale: 1.05,
@@ -125,7 +164,7 @@ function App() {
       {/* Book Section */}
       <motion.section 
         id="book" 
-        className="min-h-screen flex items-center justify-center bg-white"
+        className="min-h-screen flex items-center justify-center bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -136,29 +175,31 @@ function App() {
           variants={containerVariants}
         >
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
             variants={contentVariants}
             whileHover={{ 
               scale: 1.05,
-              color: "#DC2626",
+              color: theme === 'dark' ? "#f87171" : "#DC2626",
               transition: { duration: 0.3 }
             }}
           >
             Availability
           </motion.h2>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8"
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-8"
             variants={contentVariants}
           >
             Check our availability and book your stay
           </motion.p>
           
           <motion.button
-            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-lg text-lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-4 px-8 rounded-lg text-lg transition-colors"
             variants={contentVariants}
             whileHover={{
               scale: 1.05,
-              boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)",
+              boxShadow: theme === 'dark' 
+                ? "0 10px 25px rgba(255, 255, 255, 0.1)" 
+                : "0 10px 25px rgba(59, 130, 246, 0.3)",
               transition: { duration: 0.3 }
             }}
             whileTap={{ scale: 0.95 }}
@@ -171,7 +212,7 @@ function App() {
       {/* Contact Section */}
       <motion.section 
         id="contact" 
-        className="min-h-screen flex items-center justify-center bg-gray-100 relative"
+        className="min-h-screen flex items-center justify-center bg-muted/30 relative"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
@@ -182,18 +223,18 @@ function App() {
           variants={containerVariants}
         >
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
+            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
             variants={contentVariants}
             whileHover={{ 
               scale: 1.05,
-              color: "#7C3AED",
+              color: theme === 'dark' ? "#a78bfa" : "#7C3AED",
               transition: { duration: 0.3 }
             }}
           >
             Contact
           </motion.h2>
           <motion.p 
-            className="text-xl md:text-2xl text-gray-600 leading-relaxed mb-8"
+            className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-8"
             variants={contentVariants}
           >
             Get in touch with us to plan your perfect getaway
@@ -205,50 +246,58 @@ function App() {
             variants={containerVariants}
           >
             <motion.div
-              className="bg-white p-6 rounded-lg shadow-lg"
+              className="bg-card border border-border p-6 rounded-lg shadow-lg"
               variants={contentVariants}
               whileHover={{
                 y: -10,
                 scale: 1.02,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                boxShadow: theme === 'dark' 
+                  ? "0 20px 40px rgba(255,255,255,0.05)" 
+                  : "0 20px 40px rgba(0,0,0,0.1)",
                 transition: { duration: 0.3 }
               }}
             >
-              <h3 className="text-lg font-semibold mb-2">Phone</h3>
-              <p className="text-gray-600">+995 XXX XXX XXX</p>
+              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Phone</h3>
+              <p className="text-muted-foreground">+995 XXX XXX XXX</p>
             </motion.div>
 
             <motion.div
-              className="bg-white p-6 rounded-lg shadow-lg"
+              className="bg-card border border-border p-6 rounded-lg shadow-lg"
               variants={contentVariants}
               whileHover={{
                 y: -10,
                 scale: 1.02,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                boxShadow: theme === 'dark' 
+                  ? "0 20px 40px rgba(255,255,255,0.05)" 
+                  : "0 20px 40px rgba(0,0,0,0.1)",
                 transition: { duration: 0.3 }
               }}
             >
-              <h3 className="text-lg font-semibold mb-2">Email</h3>
-              <p className="text-gray-600">info@sakhluka.ge</p>
+              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Email</h3>
+              <p className="text-muted-foreground">info@sakhluka.ge</p>
             </motion.div>
 
             <motion.div
-              className="bg-white p-6 rounded-lg shadow-lg"
+              className="bg-card border border-border p-6 rounded-lg shadow-lg"
               variants={contentVariants}
               whileHover={{
                 y: -10,
                 scale: 1.02,
-                boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                boxShadow: theme === 'dark' 
+                  ? "0 20px 40px rgba(255,255,255,0.05)" 
+                  : "0 20px 40px rgba(0,0,0,0.1)",
                 transition: { duration: 0.3 }
               }}
             >
-              <h3 className="text-lg font-semibold mb-2">Location</h3>
-              <p className="text-gray-600">Racha, Georgia</p>
+              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Location</h3>
+              <p className="text-muted-foreground">Racha, Georgia</p>
             </motion.div>
           </motion.div>
         </motion.div>
       </motion.section>
-    </div>
+        </motion.div>
+      )}
+    </>
   )
 }
 
