@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion'
 import Header from './components/Header'
 import { SmoothScrollHero } from './components/Hero'
+import About from './components/About'
+
+
+
 
 function App() {
 
@@ -55,42 +59,12 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 scroll-smooth">
       <Header />
+    
+     
       
       <SmoothScrollHero />
 
-      {/* About Section */}
-      <motion.section 
-        id="about" 
-        className="min-h-screen flex items-center justify-center bg-white"
-        variants={sectionVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <motion.div 
-          className="text-center max-w-4xl mx-auto px-6"
-          variants={containerVariants}
-        >
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-gray-900 mb-6"
-            variants={contentVariants}
-           
-          >
-            About
-          </motion.h2>
-          <motion.p 
-            className="text-xl md:text-2xl text-gray-600 leading-relaxed"
-            variants={contentVariants}
-            whileHover={{
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
-          >
-            Learn more about us and discover the beauty of Sakhluka in Racha
-          </motion.p>
-        </motion.div>
-      </motion.section>
-
+     <About />
       {/* Gallery Section */}
       <motion.section 
         id="gallery" 

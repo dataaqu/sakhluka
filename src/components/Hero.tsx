@@ -5,6 +5,8 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import { FiChevronDown } from "react-icons/fi";
+import { Link } from "react-scroll";
 
 import { useRef } from "react";
 
@@ -33,9 +35,9 @@ const MOBILE_SECTION_HEIGHT = 800;
 
 const Hero = () => {
   return (
-    <>
+    <div id="hero" className="relative w-full">
       {/* Desktop version */}
-      <div
+      <div 
         style={{ height: `calc(${SECTION_HEIGHT}px + 100vh)` }}
         className="relative w-full hidden md:block"
       >
@@ -53,7 +55,10 @@ const Hero = () => {
         <ParallaxImagesMobile />
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-zinc-950/0 to-zinc-950" />
       </div>
-    </>
+      
+      {/* Floating scroll button for mobile */}
+      <FloatingScrollButton />
+    </div>
   );
 };
 
@@ -220,6 +225,24 @@ const ParallaxImg = ({ className, alt, src, start, end }: {
       ref={ref}
       style={{ transform, opacity }}
     />
+  );
+};
+
+const FloatingScrollButton = () => {
+  return (
+    <div className="fixed bottom-6 right-6 z-40 md:hidden">
+      <Link
+        to="about"
+        spy={true}
+        smooth={true}
+        offset={-100}
+        duration={1800}
+        delay={200}
+        className="bg-zinc-800/90 backdrop-blur-sm text-white p-4 rounded-full shadow-lg hover:bg-zinc-700 transition-all duration-300 cursor-pointer flex items-center justify-center"
+      >
+        <FiChevronDown className="w-6 h-6 animate-bounce" />
+      </Link>
+    </div>
   );
 };
 
