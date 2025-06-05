@@ -2,11 +2,11 @@
 
 /* CSS variables for shadcn/ui components */
 :root {
-  --background: 0 0% 100%;
+  --background: 35 48% 87%;
   --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
+  --card: 35 48% 87%;
   --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
+  --popover: 35 48% 87%;
   --popover-foreground: 222.2 84% 4.9%;
   --primary: 222.2 47.4% 11.2%;
   --primary-foreground: 210 40% 98%;
@@ -55,4 +55,15 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+}
+
+/* Improve scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure proper touch scrolling for carousel containers */
+[data-carousel] {
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x pinch-zoom;
 }

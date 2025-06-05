@@ -4,6 +4,10 @@ import Header from './components/Header'
 import { SmoothScrollHero } from './components/Hero'
 import About from './components/About'
 import Loader from './components/Loader'
+import { ParallaxScrollDemo } from './components/Gallery'
+import BottomNavigation from './components/BottomNavigation'
+
+
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -13,6 +17,9 @@ function App() {
   useEffect(() => {
     const savedTheme = localStorage.getItem('sakhluka-theme') || 'dark'
     setTheme(savedTheme)
+    
+    // Ensure dark mode is applied to document from the start
+    document.documentElement.classList.add('dark')
     
     // Apply theme to document
     if (savedTheme === 'dark') {
@@ -99,6 +106,9 @@ function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1, ease: "easeOut" }}
         >
+          {/* Add decorative shapes to body */}
+         
+          
           <Header theme={theme} onThemeChange={handleThemeChange} />
           
           <SmoothScrollHero />
@@ -107,57 +117,30 @@ function App() {
       {/* Gallery Section */}
       <motion.section 
         id="gallery" 
-        className="min-h-screen flex items-center justify-center bg-muted/30 relative"
+        className="bg-muted/30 relative py-20"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.1 }}
       >
         <motion.div 
-          className="text-center max-w-4xl mx-auto px-6"
+          className="text-center max-w-7xl mx-auto px-6"
           variants={containerVariants}
         >
           <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
+            className="text-3xl md:text-4xl font-bold text-foreground mb-6"
             variants={contentVariants}
-            whileHover={{ 
-              scale: 1.05,
-              color: theme === 'dark' ? "#10b981" : "#059669",
-              transition: { duration: 0.3 }
-            }}
           >
-            Gallery
+            Our cabin, inside and out — a visual journey
           </motion.h2>
-          <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground leading-relaxed"
-            variants={contentVariants}
-            whileHover={{
-              scale: 1.02,
-              transition: { duration: 0.3 }
-            }}
-          >
-            Beautiful moments captured in the heart of Georgian mountains
-          </motion.p>
+        </motion.div>
           
-          {/* Image placeholder grid */}
-          <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8"
-            variants={containerVariants}
-          >
-            {[1, 2, 3, 4, 5, 6].map((item) => (
-              <motion.div
-                key={item}
-                className="h-32 bg-gradient-to-br from-emerald-200/80 to-blue-200/80 dark:from-emerald-800/40 dark:to-blue-800/40 rounded-lg border border-border"
-                variants={contentVariants}
-                whileHover={{
-                  scale: 1.05,
-                  rotate: 2,
-                  transition: { duration: 0.3 }
-                }}
-                whileTap={{ scale: 0.95 }}
-              />
-            ))}
-          </motion.div>
+        {/* Parallax Scroll Gallery */}
+        <motion.div 
+          variants={contentVariants}
+          className="w-full"
+        >
+          <ParallaxScrollDemo />
         </motion.div>
       </motion.section>
 
@@ -295,6 +278,7 @@ function App() {
           </motion.div>
         </motion.div>
       </motion.section>
+      <BottomNavigation theme={theme} />
         </motion.div>
       )}
     </>

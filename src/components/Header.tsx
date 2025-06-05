@@ -3,6 +3,8 @@ import { Link } from 'react-scroll'
 import { motion } from 'framer-motion'
 import { FiMoon, FiSun, FiGlobe } from 'react-icons/fi'
 
+
+
 const TOGGLE_CLASSES =
   "text-xs font-medium flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-1 transition-colors relative z-10";
 
@@ -100,42 +102,76 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
     }), [theme]);
 
     return (
-      <div className={`relative flex w-fit items-center rounded-full backdrop-blur-sm border-2 ${
-        theme === "light" ? "border-black" : "border-white"
+      <div className={`relative flex w-fit items-center rounded-full backdrop-blur-sm"
       }`}>
         {/* Sliding background div */}
         <motion.div
           className={`absolute top-0 h-full w-1/2 rounded-full ${
-            theme === "dark" ? "bg-white" : "bg-black"
+            theme === "dark" ? "bg-white" : "bg-slate-950"
           }`}
-          animate={themeSliderPosition}
+          animate={{
+            x: themeSliderPosition.x,
+            scale: [1, 1.1, 1],
+            rotateY: [0, 5, 0],
+          }}
           initial={false}
-          transition={{ type: "spring", damping: 15, stiffness: 250 }}
+          transition={{ 
+            type: "spring", 
+            damping: 10, 
+            stiffness: 350,
+            mass: 0.6,
+            scale: { duration: 0.3 },
+            rotateY: { duration: 0.4 },
+          }}
+          whileHover={{ 
+            scale: 1.05,
+            boxShadow: theme === "dark" 
+              ? "0 0 30px rgba(255, 255, 255, 0.5)" 
+              : "0 0 30px rgba(0, 0, 0, 0.1)"
+          }}
+          style={{
+            boxShadow: theme === "dark" 
+              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
+              : "0 0 20px rgba(0, 0, 0, 0.1)",
+            transformPerspective: "1000px"
+          }}
         />
         
-        <button
+        <motion.button
           className={`${TOGGLE_CLASSES} ${
             theme === "light" 
               ? "text-white" 
               : "text-muted-foreground"
           }`}
           onClick={() => onThemeChange("light")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{ 
+            scale: theme === "light" ? 1.1 : 1,
+          }}
+          transition={{ type: "spring", damping: 15, stiffness: 300 }}
         >
           <FiSun className="relative z-10 text-sm" />
           <span className="relative z-10 hidden sm:inline"></span>
-        </button>
+        </motion.button>
         
-        <button
+        <motion.button
           className={`${TOGGLE_CLASSES} ${
             theme === "dark" 
               ? "text-black" 
               : "text-muted-foreground"
           }`}
           onClick={() => onThemeChange("dark")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{ 
+            scale: theme === "dark" ? 1.1 : 1,
+          }}
+          transition={{ type: "spring", damping: 15, stiffness: 300 }}
         >
           <FiMoon className="relative z-10 text-sm" />
           <span className="relative z-10 hidden sm:inline"></span>
-        </button>
+        </motion.button>
       </div>
     );
   };
@@ -147,42 +183,76 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
     }), [language]);
 
     return (
-      <div className={`relative flex w-fit items-center rounded-full backdrop-blur-sm border-2 ${
-        theme === "dark" ? "border-white" : "border-black"
+      <div className={`relative flex w-fit items-center rounded-full backdrop-blur-sm"
       }`}>
         {/* Sliding background div */}
         <motion.div
           className={`absolute top-0 h-full w-1/2 rounded-full ${
-            theme === "dark" ? "bg-white" : "bg-black"
+            theme === "dark" ? "bg-white" : "bg-slate-950"
           }`}
-          animate={languageSliderPosition}
+          animate={{
+            x: languageSliderPosition.x,
+            scale: [1, 1.1, 1],
+            rotateY: [0, 5, 0],
+          }}
           initial={false}
-          transition={{ type: "spring", damping: 15, stiffness: 250 }}
+          transition={{ 
+            type: "spring", 
+            damping: 10, 
+            stiffness: 350,
+            mass: 0.6,
+            scale: { duration: 0.3 },
+            rotateY: { duration: 0.4 },
+          }}
+          whileHover={{ 
+            scale: 1.05,
+            boxShadow: theme === "dark" 
+              ? "0 0 30px rgba(255, 255, 255, 0.5)" 
+              : "0 0 30px rgba(0, 0, 0, 0.1)"
+          }}
+          style={{
+            boxShadow: theme === "dark" 
+              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
+              : "0 0 20px rgba(0, 0, 0, 0.1)",
+            transformPerspective: "1000px"
+          }}
         />
         
-        <button
+        <motion.button
           className={`${TOGGLE_CLASSES} ${
             language === "EN" 
               ? (theme === "dark" ? "text-black" : "text-white") 
               : "text-muted-foreground"
           }`}
           onClick={() => setLanguage("EN")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{ 
+            scale: language === "EN" ? 1.1 : 1,
+          }}
+          transition={{ type: "spring", damping: 15, stiffness: 300 }}
         >
           <FiGlobe className="relative z-10 text-sm" />
           <span className="relative z-10">EN</span>
-        </button>
+        </motion.button>
         
-        <button
+        <motion.button
           className={`${TOGGLE_CLASSES} ${
             language === "ქარ" 
               ? (theme === "dark" ? "text-black" : "text-white") 
               : "text-muted-foreground"
           }`}
           onClick={() => setLanguage("ქარ")}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{ 
+            scale: language === "ქარ" ? 1.1 : 1,
+          }}
+          transition={{ type: "spring", damping: 15, stiffness: 300 }}
         >
           <FiGlobe className="relative z-10 text-sm" />
           <span className="relative z-10">ქარ</span>
-        </button>
+        </motion.button>
       </div>
     );
   };
@@ -190,9 +260,10 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
   return (
     <>
       <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm p-6 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
           {/* Logo */}
           <div className="flex items-center">
+        
             <h1 className="text-2xl font-bold text-foreground">Sakhluka</h1>
           </div>
 
@@ -202,6 +273,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               <Link
                 key={item.href}
                 to={item.href}
+                href={`#${item.href}`}
                 spy={scrollConfig.spy}
                 smooth={scrollConfig.smooth}
                 offset={item.href === "hero" ? 0 : -80}
@@ -264,6 +336,7 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               <Link
                 key={item.href}
                 to={item.href}
+                href={`#${item.href}`}
                 spy={mobileScrollConfig.spy}
                 smooth={mobileScrollConfig.smooth}
                 offset={getMobileOffset(item.href)}

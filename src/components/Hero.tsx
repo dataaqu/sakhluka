@@ -7,7 +7,7 @@ import {
 } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
 import { Link } from "react-scroll";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 
 // Import all images
 import cov3 from "../assets/cov3.jpg";
@@ -17,14 +17,37 @@ import img3 from "../assets/3.jpg";
 import img5 from "../assets/4.jpg";
 
 export const SmoothScrollHero = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1027);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // For mobile devices, don't use Lenis to avoid scroll conflicts
+  if (isMobile) {
+    return (
+      <div className="bg-background transition-colors duration-300">
+        <Hero />
+        <Schedule />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background transition-colors duration-300">
       <ReactLenis
         root
         options={{
           lerp: 0.05,
+          syncTouch: true, // Enable touch scrolling
+          touchMultiplier: 2, // Increase touch scroll speed
           //   infinite: true,
-          //   syncTouch: true,
         }}
       >
        
