@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { FiArrowUpRight } from "react-icons/fi";
+import { SiAirbnb } from "react-icons/si";
 import mountainImage from "../assets/5.jpg";
 
 const IMG_PADDING = 12;
@@ -94,11 +95,21 @@ const ExampleContent: React.FC = () => (
   <div className="mx-auto  max-w-5xl  gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
     
     <div className="col-span-1 md:col-span-8">
-      <p className="mb-4 text-xl text-muted-foreground md:text-3xl">
+      <motion.p 
+        initial={{ y: 48, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ ease: "easeInOut", duration: 0.75 }}
+        className="mb-4 text-xl text-muted-foreground md:text-3xl"
+      >
 Surrounded by forest paths, mountain streams, and the quiet rhythm of nature, Sakhluka invites you to truly slow down. Spend your days exploring nearby trails or simply lounging in the sun-drenched yard with a good book. Evenings are perfect for gathering around the outdoor fire, sharing stories, and watching the stars light up the sky.
 
-      </p>
-      <p className="mb-8 text-xl text-muted-foreground md:text-3xl">
+      </motion.p>
+      <motion.p 
+        initial={{ y: 48, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
+        className="mb-8 text-xl text-muted-foreground md:text-3xl"
+      >
 Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and make space for peace, comfort, and unforgettable mountain moments.
 
 
@@ -108,10 +119,26 @@ Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and
 
 
 
-      </p>
-      <button className="w-full rounded bg-primary px-9 py-4 text-xl text-primary-foreground transition-colors hover:bg-primary/90 md:w-fit">
-        Book Your Stay <FiArrowUpRight className="inline" />
-      </button>
+      </motion.p>
+      <motion.button 
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ ease: "easeInOut", duration: 1, delay: 0.4 }}
+        onClick={() => window.open('https://airbnb.com', '_blank')}
+        className="w-full md:w-fit px-9 py-4 text-xl rounded-md border-[1px] border-slate-300 bg-slate-950 text-white hover:bg-slate-800 transition-all duration-300 group relative overflow-hidden cursor-pointer"
+      >
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ ease: "easeInOut", duration: 1, delay: 0.4 }}
+        >
+        </motion.div>
+        <span className="relative z-10 flex items-center justify-center gap-2">
+          <SiAirbnb className="text-2xl group-hover:text-white group-hover:rotate-12 transition-all duration-300" />
+          Book Your Stay <FiArrowUpRight className="inline group-hover:rotate-12 transition-transform duration-300" />
+        </span>
+        <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 translate-y-[100%] group-hover:translate-y-[0%] transition-transform duration-300" />
+      </motion.button>
     </div>
   </div>
 );

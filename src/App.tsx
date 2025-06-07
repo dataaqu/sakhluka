@@ -5,9 +5,10 @@ import { SmoothScrollHero } from './components/Hero'
 import About from './components/About'
 import Loader from './components/Loader'
 import { ParallaxScrollDemo } from './components/Gallery'
+import Contact from './components/Contact'
+import Book from './components/Book'
 import BottomNavigation from './components/BottomNavigation'
-
-
+import Footer from './components/Footer'
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -127,12 +128,7 @@ function App() {
           className="text-center max-w-7xl mx-auto px-6"
           variants={containerVariants}
         >
-          <motion.h2 
-            className="text-3xl md:text-4xl font-bold text-foreground mb-6"
-            variants={contentVariants}
-          >
-            Our cabin, inside and out — a visual journey
-          </motion.h2>
+       
         </motion.div>
           
         {/* Parallax Scroll Gallery */}
@@ -147,137 +143,32 @@ function App() {
       {/* Book Section */}
       <motion.section 
         id="book" 
-        className="min-h-screen flex items-center justify-center bg-background"
+        className="bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
+        viewport={{ once: true, amount: 0.1 }}
       >
-        <motion.div 
-          className="text-center max-w-4xl mx-auto px-6"
-          variants={containerVariants}
-        >
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
-            variants={contentVariants}
-            whileHover={{ 
-              scale: 1.05,
-              color: theme === 'dark' ? "#f87171" : "#DC2626",
-              transition: { duration: 0.3 }
-            }}
-          >
-            Availability
-          </motion.h2>
-          <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-8"
-            variants={contentVariants}
-          >
-            Check our availability and book your stay
-          </motion.p>
-          
-          <motion.button
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-4 px-8 rounded-lg text-lg transition-colors"
-            variants={contentVariants}
-            whileHover={{
-              scale: 1.05,
-              boxShadow: theme === 'dark' 
-                ? "0 10px 25px rgba(255, 255, 255, 0.1)" 
-                : "0 10px 25px rgba(59, 130, 246, 0.3)",
-              transition: { duration: 0.3 }
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Check Availability
-          </motion.button>
-        </motion.div>
+        <Book />
       </motion.section>
 
       {/* Contact Section */}
       <motion.section 
         id="contact" 
-        className="min-h-screen flex items-center justify-center bg-muted/30 relative"
+        className="bg-background"
         variants={sectionVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <motion.div 
-          className="text-center max-w-4xl mx-auto px-6"
-          variants={containerVariants}
-        >
-          <motion.h2 
-            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
-            variants={contentVariants}
-            whileHover={{ 
-              scale: 1.05,
-              color: theme === 'dark' ? "#a78bfa" : "#7C3AED",
-              transition: { duration: 0.3 }
-            }}
-          >
-            Contact
-          </motion.h2>
-          <motion.p 
-            className="text-xl md:text-2xl text-muted-foreground leading-relaxed mb-8"
-            variants={contentVariants}
-          >
-            Get in touch with us to plan your perfect getaway
-          </motion.p>
-
-          {/* Contact cards */}
-          <motion.div 
-            className="grid md:grid-cols-3 gap-6 mt-8"
-            variants={containerVariants}
-          >
-            <motion.div
-              className="bg-card border border-border p-6 rounded-lg shadow-lg"
-              variants={contentVariants}
-              whileHover={{
-                y: -10,
-                scale: 1.02,
-                boxShadow: theme === 'dark' 
-                  ? "0 20px 40px rgba(255,255,255,0.05)" 
-                  : "0 20px 40px rgba(0,0,0,0.1)",
-                transition: { duration: 0.3 }
-              }}
-            >
-              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Phone</h3>
-              <p className="text-muted-foreground">+995 XXX XXX XXX</p>
-            </motion.div>
-
-            <motion.div
-              className="bg-card border border-border p-6 rounded-lg shadow-lg"
-              variants={contentVariants}
-              whileHover={{
-                y: -10,
-                scale: 1.02,
-                boxShadow: theme === 'dark' 
-                  ? "0 20px 40px rgba(255,255,255,0.05)" 
-                  : "0 20px 40px rgba(0,0,0,0.1)",
-                transition: { duration: 0.3 }
-              }}
-            >
-              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Email</h3>
-              <p className="text-muted-foreground">info@sakhluka.ge</p>
-            </motion.div>
-
-            <motion.div
-              className="bg-card border border-border p-6 rounded-lg shadow-lg"
-              variants={contentVariants}
-              whileHover={{
-                y: -10,
-                scale: 1.02,
-                boxShadow: theme === 'dark' 
-                  ? "0 20px 40px rgba(255,255,255,0.05)" 
-                  : "0 20px 40px rgba(0,0,0,0.1)",
-                transition: { duration: 0.3 }
-              }}
-            >
-              <h3 className="text-lg font-semibold mb-2 text-card-foreground">Location</h3>
-              <p className="text-muted-foreground">Racha, Georgia</p>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+        <Contact />
       </motion.section>
+  
+            
+      
+      {/* Footer */}
+      <Footer theme={theme} />
+      
       <BottomNavigation theme={theme} />
         </motion.div>
       )}
