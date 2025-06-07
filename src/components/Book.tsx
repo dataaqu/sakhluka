@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import { SiAirbnb } from 'react-icons/si';
-import { FiCalendar, FiClock, FiCheckCircle, FiX } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiX } from 'react-icons/fi';
 import 'react-datepicker/dist/react-datepicker.css';
 
 // Mock blocked dates - In production, this would come from Firebase/Airbnb iCal sync
@@ -72,35 +72,58 @@ const Book = () => {
     return false;
   };
 
-  // Filter available dates (exclude blocked dates and past dates)
-  const isDateAvailable = (date: Date): boolean => {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date >= today && !isDateBlocked(date);
-  };
-
-  // Enhanced check-out date availability 
-  const isCheckOutDateAvailable = (date: Date): boolean => {
+  // Enhanced filter for calendar dates - considers range restrictions
+  const isCalendarDateAvailable = (date: Date): boolean => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     
-    // Basic checks
+    // Basic availability check
     if (date < today || isDateBlocked(date)) return false;
-    if (!checkInDate) return false;
-    if (date <= checkInDate) return false;
     
-    // Check if there are any blocked dates between check-in and this check-out date
-    return !hasBlockedDatesBetween(checkInDate, date);
+    // If check-in date is selected, check if this date would create a valid range
+    if (checkInDate && date > checkInDate) {
+      // Don't allow selection if there are blocked dates between check-in and this date
+      return !hasBlockedDatesBetween(checkInDate, date);
+    }
+    
+    return true;
   };
 
-  // Handle check-in date change
-  const handleCheckInChange = (date: Date | null) => {
-    setCheckInDate(date);
-    
-    // Reset check-out if it's before new check-in date OR if there are blocked dates between
-    if (checkOutDate && date) {
-      if (checkOutDate <= date || hasBlockedDatesBetween(date, checkOutDate)) {
+
+
+  // Handle single calendar date selection for range mode
+  const handleDateSelection = (dates: [Date | null, Date | null] | Date | null) => {
+    if (Array.isArray(dates)) {
+      // Range selection mode - dates is [startDate, endDate]
+      const [start, end] = dates;
+      
+      // If both dates are selected, check if there are blocked dates between them
+      if (start && end && hasBlockedDatesBetween(start, end)) {
+        // Don't allow selection if there are blocked dates in between
+        // Keep only the start date and reset end date
+        setCheckInDate(start);
         setCheckOutDate(null);
+        return;
+      }
+      
+      setCheckInDate(start);
+      setCheckOutDate(end);
+    } else {
+      // Single date mode (fallback)
+      const date = dates;
+      if (!date) return;
+      
+      // If no check-in date is set, or if we're clicking before check-in date, set check-in
+      if (!checkInDate || date <= checkInDate) {
+        setCheckInDate(date);
+        setCheckOutDate(null); // Reset check-out when setting new check-in
+      } 
+      // If check-in is set and we're clicking after it, set check-out
+      else if (checkInDate && date > checkInDate) {
+        // Check if there are blocked dates between check-in and selected date
+        if (!hasBlockedDatesBetween(checkInDate, date)) {
+          setCheckOutDate(date);
+        }
       }
     }
   };
@@ -173,87 +196,73 @@ const Book = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
-          className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 lg:gap-12"
+          className="grid lg:grid-cols-[65%_35%] md:grid-cols-1 gap-8 lg:gap-12"
         >
-          {/* Date Selection */}
-          <div className="bg-card rounded-lg p-6 border border-border shadow-lg relative overflow-hidden">
-            {/* Calendar background icon */}
-            <div className="absolute bottom-4 left-4 opacity-10 pointer-events-none">
-              <FiCalendar className="w-16 h-16 text-muted-foreground" />
-            </div>
+          {/* Calendar Visual */}
+          <div className="bg-card rounded-lg p-8 border border-border shadow-lg">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-foreground flex items-center gap-2">
-                <FiCalendar className="text-primary" />
-                Select Your Dates
-              </h3>
-              
-              {/* Clear Button */}
-              {(checkInDate || checkOutDate) && (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  onClick={clearDates}
-                  className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded-md transition-colors duration-200"
-                  title="Clear selected dates"
-                >
-                  <FiX className="text-sm" />
-                  Clear
-                </motion.button>
+              {!checkInDate && !checkOutDate && (
+                <h3 className="text-2xl font-semibold text-foreground text-center flex-1">
+                  Choose Your Dates
+                </h3>
               )}
             </div>
+
+            {/* Selected Dates Display */}
+            {(checkInDate || checkOutDate) && (
+              <div className="mb-6 p-4 bg-muted/30 rounded-lg border border-border">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Check-in Date</p>
+                    <p className="text-lg font-semibold text-foreground">
+                      {checkInDate ? checkInDate.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      }) : 'Not selected'}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-muted-foreground mb-1">Check-out Date</p>
+                    <p className="text-lg font-semibold text-foreground">
+                      {checkOutDate ? checkOutDate.toLocaleDateString('en-US', { 
+                        weekday: 'short', 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      }) : 'Not selected'}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Clear Button */}
+                {(checkInDate && checkOutDate) && (
+                  <div className="flex justify-center mt-4">
+                    <motion.button
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      onClick={clearDates}
+                      className="flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded-md transition-colors duration-200 cursor-pointer"
+                      title="Clear selected dates"
+                    >
+                      <FiX className="text-sm" />
+                      Clear Dates
+                    </motion.button>
+                  </div>
+                )}
+              </div>
+            )}
             
-            {/* Date Inputs Side by Side */}
-            <div className="grid grid-cols-1 gap-4 mb-6">
-              {/* Check-in Date */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">
-                  Check-in Date
-                </label>
-                <DatePicker
-                  selected={checkInDate}
-                  onChange={handleCheckInChange}
-                  filterDate={isDateAvailable}
-                  minDate={new Date()}
-                  placeholderText="Select check-in date"
-                  className="w-full p-3 border border-border rounded-md bg-background text-foreground "
-                  dateFormat="MMMM d, yyyy"
-                  disabled={isLoading}
-                />
-              </div>
-
-              {/* Check-out Date */}
-              <div>
-                <label className="block text-sm font-medium text-muted-foreground mb-2">
-                  Check-out Date
-                </label>
-                <DatePicker
-                  selected={checkOutDate}
-                  onChange={setCheckOutDate}
-                  filterDate={isCheckOutDateAvailable}
-                  minDate={checkInDate ? new Date(checkInDate.getTime() + 24 * 60 * 60 * 1000) : new Date()}
-                  placeholderText="Select check-out date"
-                  className="w-full p-3 border border-border rounded-md bg-background text-foreground"
-                  dateFormat="MMMM d, yyyy"
-                  disabled={isLoading || !checkInDate}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Calendar Visual */}
-          <div className="bg-card rounded-lg p-6 border border-border shadow-lg">
-            <h3 className="text-xl font-semibold text-foreground mb-4 text-center">
-              Calendar View
-            </h3>
             <div className="flex justify-center">
               <DatePicker
                 selected={checkInDate}
-                onChange={handleCheckInChange}
-                filterDate={isDateAvailable}
+                onChange={handleDateSelection}
+                filterDate={isCalendarDateAvailable}
                 minDate={new Date()}
                 inline
-                selectsStart
+                selectsRange
                 startDate={checkInDate}
                 endDate={checkOutDate}
                 calendarClassName="custom-calendar"
@@ -262,7 +271,7 @@ const Book = () => {
             </div>
             
             {/* Calendar Legend */}
-            <div className="calendar-legend mt-4">
+            <div className="calendar-legend mt-6">
               <div className="legend-item">
                 <div className="legend-dot legend-available"></div>
                 <span className="text-green-700 dark:text-green-300">Available</span>
@@ -272,20 +281,12 @@ const Book = () => {
                 <span className="text-red-700 dark:text-red-300">Blocked</span>
               </div>
             </div>
-            
-            {/* Date Selection Info */}
-            <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg border border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-gray-600 dark:text-gray-400 text-center">
-                💡 Only dates without blocked days in between are available
-              </p>
-            </div>
           </div>
 
           {/* Booking Section */}
-          <div className="bg-card rounded-lg p-6 border border-border shadow-lg">
-            <h3 className="text-xl font-semibold text-foreground mb-6 flex items-center gap-2">
-              <SiAirbnb className="text-red-500" />
-              Book Your Stay
+          <div className="bg-card rounded-lg p-8 border border-border shadow-lg">
+            <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">
+              Your Booking
             </h3>
             
             {/* Booking Summary */}
@@ -296,28 +297,38 @@ const Book = () => {
                 className="mb-6"
               >
                 {isSelectionValid() ? (
-                  <div className="p-4 bg-muted/30 rounded-lg border border-border">
-                    <h4 className="text-lg font-semibold text-foreground mb-3">Booking Summary</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
+                  <div className="p-6 bg-muted/30 rounded-lg border border-border">
+                    <h4 className="text-xl font-semibold text-foreground mb-4">Booking Summary</h4>
+                    <div className="space-y-3 text-base">
+                      <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Check-in:</span>
-                        <span className="font-medium">{checkInDate.toLocaleDateString()}</span>
+                        <span className="font-medium">{checkInDate.toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          month: 'short', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}</span>
                       </div>
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <span className="text-muted-foreground">Check-out:</span>
-                        <span className="font-medium">{checkOutDate.toLocaleDateString()}</span>
+                        <span className="font-medium">{checkOutDate.toLocaleDateString('en-US', { 
+                          weekday: 'short', 
+                          month: 'short', 
+                          day: 'numeric', 
+                          year: 'numeric' 
+                        })}</span>
                       </div>
-                      <div className="flex justify-between border-t border-border pt-2">
+                      <div className="flex justify-between items-center border-t border-border pt-3">
                         <span className="text-muted-foreground">Total Nights:</span>
-                        <span className="font-semibold text-primary">
+                        <span className="font-semibold text-primary text-lg">
                           {calculateNights()} night{calculateNights() !== 1 ? 's' : ''}
                         </span>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="p-4 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
-                    <h4 className="text-lg font-semibold text-red-700 dark:text-red-300 mb-2 flex items-center gap-2">
+                  <div className="p-6 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+                    <h4 className="text-lg font-semibold text-red-700 dark:text-red-300 mb-3 flex items-center gap-2">
                       <FiX className="text-red-500" />
                       Invalid Date Range
                     </h4>
@@ -338,7 +349,7 @@ const Book = () => {
               <button
                 onClick={handleBookNow}
                 disabled={!checkInDate || !checkOutDate || isLoading || !isSelectionValid()}
-                className="w-full group relative overflow-hidden bg-slate-950 text-white border border-slate-300 rounded-lg p-6 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300"
+                className="w-full group relative overflow-hidden bg-slate-950 text-white border border-slate-300 rounded-lg p-6 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 cursor-pointer"
               >
                 {/* Background gradient effect */}
                 <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 translate-y-[100%] group-hover:translate-y-[0%] transition-transform duration-300" />
@@ -385,18 +396,28 @@ const Book = () => {
           color: hsl(var(--foreground));
           font-family: inherit;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          font-size: 16px;
         }
         
         .react-datepicker__header {
           background-color: hsl(var(--muted));
           border-bottom: 1px solid hsl(var(--border));
           border-radius: 8px 8px 0 0;
+          padding: 16px 8px;
         }
         
         .react-datepicker__current-month,
         .react-datepicker__day-name {
           color: hsl(var(--foreground));
           font-weight: 600;
+          font-size: 16px;
+        }
+        
+        .react-datepicker__day-name {
+          width: 3rem;
+          height: 2.5rem;
+          line-height: 2.5rem;
+          margin: 0.2rem;
         }
         
         /* Available dates - default state */
@@ -405,6 +426,11 @@ const Book = () => {
           border-radius: 6px;
           transition: all 0.2s ease;
           font-weight: 500;
+          width: 3rem;
+          height: 3rem;
+          line-height: 3rem;
+          margin: 0.2rem;
+          font-size: 15px;
         }
         
         /* Available dates hover - green */
@@ -490,6 +516,51 @@ const Book = () => {
         
         .legend-available { background-color: #22c55e; }
         .legend-blocked { background-color: #dc2626; }
+        
+        /* Calendar popup positioning and styling */
+        .checkin-calendar .react-datepicker-popper,
+        .checkout-calendar .react-datepicker-popper {
+          z-index: 9999 !important;
+          position: absolute !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+        }
+        
+        .checkin-calendar .react-datepicker-popper[data-placement^="bottom"],
+        .checkout-calendar .react-datepicker-popper[data-placement^="bottom"] {
+          margin-top: 10px !important;
+        }
+        
+        .react-datepicker {
+          border: 1px solid hsl(var(--border)) !important;
+          border-radius: 8px !important;
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+          background-color: hsl(var(--background)) !important;
+          font-family: inherit !important;
+          position: relative !important;
+        }
+        
+        .checkin-calendar .react-datepicker__triangle,
+        .checkout-calendar .react-datepicker__triangle {
+          border-bottom-color: hsl(var(--background)) !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+        }
+        
+        .checkin-calendar .react-datepicker__triangle::before,
+        .checkout-calendar .react-datepicker__triangle::before {
+          border-bottom-color: hsl(var(--border)) !important;
+          left: 50% !important;
+          transform: translateX(-50%) !important;
+        }
+        
+        /* Ensure calendar doesn't overflow viewport and centers properly */
+        .checkin-calendar .react-datepicker-popper[data-placement*="bottom"],
+        .checkout-calendar .react-datepicker-popper[data-placement*="bottom"] {
+          left: 50% !important;
+          right: auto !important;
+          transform: translateX(-50%) !important;
+        }
         `
       }} />
     </section>
