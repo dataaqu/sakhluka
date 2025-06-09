@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Header from './components/Header'
-import { SmoothScrollHero } from './components/Hero'
+import Hero, { WelcomeSection } from './components/Hero'
 import About from './components/About'
 import Loader from './components/Loader'
 import { ParallaxScrollDemo } from './components/Gallery'
@@ -112,9 +112,10 @@ function App() {
           
           <Header theme={theme} onThemeChange={handleThemeChange} />
           
-          <SmoothScrollHero />
+          <Hero />
+          <WelcomeSection theme={theme} />
 
-     <About />
+     <About theme={theme} />
       {/* Gallery Section */}
       <motion.section 
         id="gallery" 
@@ -136,7 +137,7 @@ function App() {
           variants={contentVariants}
           className="w-full"
         >
-          <ParallaxScrollDemo />
+          <ParallaxScrollDemo theme={theme} />
         </motion.div>
       </motion.section>
 
@@ -149,7 +150,7 @@ function App() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
       >
-        <Book />
+        <Book theme={theme} />
       </motion.section>
 
       {/* Contact Section */}
@@ -161,7 +162,7 @@ function App() {
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <Contact />
+        <Contact theme={theme} />
       </motion.section>
   
             

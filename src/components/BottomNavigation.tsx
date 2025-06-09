@@ -21,41 +21,41 @@ const BottomNavigation = ({ theme }: BottomNavigationProps) => {
       href: "hero", 
       label: "Home", 
       icon: FiHome,
-      bgColor: theme === 'light' ? 'bg-white/20' : 'bg-white/20',
-      textColor: theme === 'light' ? 'text-white' : 'text-white',
-      dotColor: theme === 'light' ? 'bg-white' : 'bg-white'
+      bgColor: theme === 'light' ? 'bg-blue-100/50' : 'bg-white/20',
+      textColor: theme === 'light' ? 'text-blue-700' : 'text-white',
+      dotColor: theme === 'light' ? 'bg-blue-700' : 'bg-white'
     },
     { 
       href: "about", 
       label: "About", 
       icon: FiInfo,
-      bgColor: theme === 'light' ? 'bg-white/20' : 'bg-white/20',
-      textColor: theme === 'light' ? 'text-white' : 'text-white',
-      dotColor: theme === 'light' ? 'bg-white' : 'bg-white'
+      bgColor: theme === 'light' ? 'bg-blue-100/50' : 'bg-white/20',
+      textColor: theme === 'light' ? 'text-blue-700' : 'text-white',
+      dotColor: theme === 'light' ? 'bg-blue-700' : 'bg-white'
     },
     { 
       href: "gallery", 
       label: "Gallery", 
       icon: FiImage,
-      bgColor: theme === 'light' ? 'bg-white/20' : 'bg-white/20',
-      textColor: theme === 'light' ? 'text-white' : 'text-white',
-      dotColor: theme === 'light' ? 'bg-white' : 'bg-white'
+      bgColor: theme === 'light' ? 'bg-blue-100/50' : 'bg-white/20',
+      textColor: theme === 'light' ? 'text-blue-700' : 'text-white',
+      dotColor: theme === 'light' ? 'bg-blue-700' : 'bg-white'
     },
     { 
       href: "book", 
       label: "Book", 
       icon: FiCalendar,
-      bgColor: theme === 'light' ? 'bg-white/20' : 'bg-white/20',
-      textColor: theme === 'light' ? 'text-white' : 'text-white',
-      dotColor: theme === 'light' ? 'bg-white' : 'bg-white'
+      bgColor: theme === 'light' ? 'bg-blue-100/50' : 'bg-white/20',
+      textColor: theme === 'light' ? 'text-blue-700' : 'text-white',
+      dotColor: theme === 'light' ? 'bg-blue-700' : 'bg-white'
     },
     { 
       href: "contact", 
       label: "Contact", 
       icon: FiMail,
-      bgColor: theme === 'light' ? 'bg-white/20' : 'bg-white/20',
-      textColor: theme === 'light' ? 'text-white' : 'text-white',
-      dotColor: theme === 'light' ? 'bg-white' : 'bg-white'
+      bgColor: theme === 'light' ? 'bg-blue-100/50' : 'bg-white/20',
+      textColor: theme === 'light' ? 'text-blue-700' : 'text-white',
+      dotColor: theme === 'light' ? 'bg-blue-700' : 'bg-white'
     },
   ]
 
@@ -97,12 +97,17 @@ const BottomNavigation = ({ theme }: BottomNavigationProps) => {
         duration: 0.3 
       }}
     >
-      <div className={`
-        ${theme === 'light' ? 'bg-slate-950' : 'bg-slate-950'} backdrop-blur-lg 
-        ${theme === 'light' ? 'border-slate-800' : 'border-slate-800'} border
-        rounded-full px-4 py-3 shadow-2xl
-        flex items-center justify-center space-x-1
-      `}>
+      <div 
+        className={`
+          backdrop-blur-lg 
+          ${theme === 'light' ? 'border-gray-300' : 'border-slate-800'} border
+          rounded-full px-4 py-3 shadow-2xl
+          flex items-center justify-center space-x-1
+        `}
+        style={{
+          backgroundColor: theme === 'light' ? '#efdec4' : '#0f172a'
+        }}
+      >
         {navigationItems.map((item) => {
           const Icon = item.icon
           const isActive = activeSection === item.href
@@ -125,7 +130,7 @@ const BottomNavigation = ({ theme }: BottomNavigationProps) => {
                   relative p-3 rounded-full transition-all duration-200
                   ${isActive 
                     ? '' // No base background when active since we use the animated background
-                    : `hover:${theme === 'light' ? 'bg-white/10' : 'bg-white/10'}`
+                    : `hover:${theme === 'light' ? 'bg-blue-100/30' : 'bg-white/10'}`
                   }
                 `}
                 whileHover={{ scale: 1.05 }}
@@ -154,9 +159,14 @@ const BottomNavigation = ({ theme }: BottomNavigationProps) => {
                     relative z-10 text-lg
                     ${isActive 
                       ? item.textColor
-                      : `${theme === 'light' ? 'text-gray-300 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`
+                      : ''
                     }
                   `}
+                  style={{
+                    color: !isActive 
+                      ? (theme === 'light' ? '#3154cf' : '#9ca3af')
+                      : undefined
+                  }}
                 />
                 
                 {/* Active indicator dot with instant animation */}

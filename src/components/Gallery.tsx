@@ -15,7 +15,7 @@ import gallery10 from "../assets/gallery10.jpg";
 import gallery11 from "../assets/gallery11.jpg";
 import gallery12 from "../assets/gallery12.jpg";
 
-export function ParallaxScrollDemo() {
+export function ParallaxScrollDemo({ theme }: { theme?: string }) {
   return (
     <div className="w-full bg-background">
       {/* Gallery Title Section */}
@@ -24,7 +24,10 @@ export function ParallaxScrollDemo() {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75 }}
-          className="text-3xl md:text-4xl font-bold text-foreground mb-6 text-center"
+          className="text-3xl md:text-4xl font-bold mb-6 text-center"
+          style={{
+            color: theme === 'light' ? '#3154cf' : undefined
+          }}
         >
           Our cabin, inside and out — a visual journey
         </motion.h2>

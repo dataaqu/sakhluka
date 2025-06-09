@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
-// Import all images that need to be preloaded
-import cov3 from '../assets/cov3.jpg';
-import img1 from '../assets/1.jpg';
-import img2 from '../assets/2.jpg';
-import img3 from '../assets/3.jpg';
-import img4 from '../assets/4.jpg';
-import img5 from '../assets/5.jpg';
+import darkLogo from '../assets/dark.png';
 
 interface LoaderProps {
   onLoadComplete: () => void;
@@ -15,61 +8,30 @@ interface LoaderProps {
 
 const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
   const [progress, setProgress] = useState(0);
-  const [loadedImages, setLoadedImages] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
-  const [showSkipButton, setShowSkipButton] = useState(false);
-
-  // List of all images to preload
-  const imagesToLoad = [cov3, img1, img2, img3, img4, img5];
 
   useEffect(() => {
-    // Show skip button after 5 seconds for slow connections
-    const skipTimer = setTimeout(() => {
-      setShowSkipButton(true);
-    }, 5000);
-
-    const loadImages = async () => {
-      let loaded = 0;
-      
-      const imagePromises = imagesToLoad.map((src) => {
-        return new Promise<void>((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            loaded++;
-            setLoadedImages(loaded);
-            setProgress((loaded / imagesToLoad.length) * 100);
-            resolve();
-          };
-          img.onerror = () => {
-            loaded++;
-            setLoadedImages(loaded);
-            setProgress((loaded / imagesToLoad.length) * 100);
-            resolve();
-          };
-          img.src = src;
-        });
+    // Simulate loading progress to 100%
+    const progressTimer = setInterval(() => {
+      setProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressTimer);
+          setTimeout(() => {
+            setIsComplete(true);
+            setTimeout(onLoadComplete, 800);
+          }, 500);
+          return 100;
+        }
+        return prev + 2; // Increment by 2% each time
       });
-
-      await Promise.all(imagePromises);
-      
-      // Add a small delay for better UX
-      setTimeout(() => {
-        setIsComplete(true);
-        setTimeout(onLoadComplete, 800);
-      }, 500);
-    };
-
-    loadImages();
+    }, 50); // Update every 50ms
 
     return () => {
-      clearTimeout(skipTimer);
+      clearInterval(progressTimer);
     };
   }, [onLoadComplete]);
 
-  const handleSkip = () => {
-    setIsComplete(true);
-    setTimeout(onLoadComplete, 300);
-  };
+ 
 
   const containerVariants = {
     initial: { opacity: 1 },
@@ -129,8 +91,22 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
               animate="animate"
               className="mb-12"
             >
+              {/* Logo */}
+              <motion.div 
+                className="mb-2 flex justify-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+              >
+                <img 
+                  src={darkLogo} 
+                  alt="Sakhluka Logo" 
+                  className="h-40 w-40 md:h-48 md:w-48 object-contain"
+                />
+              </motion.div>
+              
               <motion.h1 
-                className="text-6xl md:text-8xl font-bold text-white mb-4"
+                className="text-5xl md:text-7xl font-bold text-white mb-4"
                 animate={{
                   textShadow: [
                     "0 0 0px rgba(255,255,255,0.5)",
@@ -152,7 +128,7 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 0.8 }}
               >
-              
+                In Racha
               </motion.p>
             </motion.div>
 
@@ -187,12 +163,9 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
                   animate={{ opacity: [0.5, 1, 0.5] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  Loading images...
+                  Loading experience...
                 </motion.span>
                 <div className="flex items-center space-x-3">
-                  <span className="text-sm font-medium">
-                    {loadedImages}/{imagesToLoad.length}
-                  </span>
                   <motion.span 
                     className="text-lg font-bold text-white"
                     key={Math.floor(progress)}
@@ -206,7 +179,7 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
               </div>
             </div>
 
-            {/* Loading Animation with image preview */}
+            {/* Loading Animation */}
             <motion.div 
               className="flex justify-center space-x-2 mb-6"
               initial={{ opacity: 0 }}
@@ -231,34 +204,6 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
               ))}
             </motion.div>
 
-            {/* Image thumbnails preview */}
-            <motion.div 
-              className="grid grid-cols-3 gap-2 w-48 mx-auto mb-4"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: progress > 50 ? 1 : 0, scale: progress > 50 ? 1 : 0.8 }}
-              transition={{ duration: 0.5 }}
-            >
-              {imagesToLoad.slice(0, 6).map((src, index) => (
-                <motion.div
-                  key={index}
-                  className="aspect-square bg-gradient-to-b from-zinc-950/0 to-zinc-950 rounded-lg overflow-hidden"
-                  initial={{ opacity: 0.3 }}
-                  animate={{ 
-                    opacity: index < loadedImages ? 1 : 0.3,
-                    scale: index < loadedImages ? 1 : 0.9
-                  }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <img 
-                    src={src} 
-                    alt={`Preview ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    style={{ filter: index < loadedImages ? 'none' : 'grayscale(100%)' }}
-                  />
-                </motion.div>
-              ))}
-            </motion.div>
-
             {/* Completion message */}
             <AnimatePresence>
               {progress === 100 && (
@@ -278,32 +223,12 @@ const Loader: React.FC<LoaderProps> = ({ onLoadComplete }) => {
                       ease: "easeInOut"
                     }}
                   >
-                    
+                    Welcome to Racha!
                   </motion.p>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Skip button for slow connections */}
-            <AnimatePresence>
-              {showSkipButton && !isComplete && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="mt-8"
-                >
-                  <motion.button
-                    onClick={handleSkip}
-                    className="px-6 py-2 border border-white/30 text-white/80 hover:text-white hover:border-white/60 rounded-full text-sm transition-all duration-300 backdrop-blur-sm"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    Skip Loading
-                  </motion.button>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
          

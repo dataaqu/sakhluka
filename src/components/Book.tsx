@@ -24,7 +24,7 @@ interface BookedDate {
   type: 'booked' | 'blocked';
 }
 
-const Book = () => {
+const Book = ({ theme }: { theme?: string }) => {
   const [checkInDate, setCheckInDate] = useState<Date | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Date | null>(null);
   const [blockedDates, setBlockedDates] = useState<BookedDate[]>([]);
@@ -170,12 +170,22 @@ const Book = () => {
           transition={{ ease: "easeInOut", duration: 0.75 }}
           className="text-center mb-16"
         >
-          <h1 className="text-3xl md:text-5xl font-black uppercase text-foreground mb-6">
+          <h1 
+            className="text-3xl md:text-5xl font-black uppercase mb-6"
+            style={{
+              color: theme === 'light' ? '#3154cf' : undefined
+            }}
+          >
             Availability Calendar
           </h1>
           <div className="flex items-center justify-center gap-2 mb-4">
             <SiAirbnb className="text-red-500 text-2xl" />
-            <p className="text-xl md:text-2xl text-muted-foreground">
+            <p 
+              className="text-xl md:text-2xl"
+              style={{
+                color: theme === 'light' ? '#3154cf' : undefined
+              }}
+            >
               Available dates — Book on Airbnb
             </p>
           </div>
@@ -199,10 +209,20 @@ const Book = () => {
           className="grid lg:grid-cols-[65%_35%] md:grid-cols-1 gap-8 lg:gap-12"
         >
           {/* Calendar Visual */}
-          <div className="bg-card rounded-lg p-8 border border-border shadow-lg">
+          <div 
+            className="rounded-lg p-8 border border-border shadow-lg"
+            style={{
+              backgroundColor: theme === 'light' ? '#3154cf' : undefined
+            }}
+          >
             <div className="flex items-center justify-between mb-6">
               {!checkInDate && !checkOutDate && (
-                <h3 className="text-2xl font-semibold text-foreground text-center flex-1">
+                <h3 
+                  className="text-2xl font-semibold text-center flex-1"
+                  style={{
+                    color: theme === 'light' ? 'white' : undefined
+                  }}
+                >
                   Choose Your Dates
                 </h3>
               )}
@@ -213,8 +233,18 @@ const Book = () => {
               <div className="mb-6 p-4 bg-muted/30 rounded-lg border border-border">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-center">
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Check-in Date</p>
-                    <p className="text-lg font-semibold text-foreground">
+                    <p 
+                      className="text-sm font-medium mb-1"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
+                    >Check-in Date</p>
+                    <p 
+                      className="text-lg font-semibold"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
+                    >
                       {checkInDate ? checkInDate.toLocaleDateString('en-US', { 
                         weekday: 'short', 
                         month: 'short', 
@@ -224,8 +254,18 @@ const Book = () => {
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">Check-out Date</p>
-                    <p className="text-lg font-semibold text-foreground">
+                    <p 
+                      className="text-sm font-medium mb-1"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
+                    >Check-out Date</p>
+                    <p 
+                      className="text-lg font-semibold"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
+                    >
                       {checkOutDate ? checkOutDate.toLocaleDateString('en-US', { 
                         weekday: 'short', 
                         month: 'short', 
@@ -244,7 +284,10 @@ const Book = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
                       onClick={clearDates}
-                      className="flex items-center gap-1 px-4 py-2 text-sm text-muted-foreground hover:text-destructive border border-border hover:border-destructive rounded-md transition-colors duration-200 cursor-pointer"
+                      className="flex items-center gap-1 px-4 py-2 text-sm border border-border hover:border-destructive rounded-md transition-colors duration-200 cursor-pointer"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
                       title="Clear selected dates"
                     >
                       <FiX className="text-sm" />
@@ -274,18 +317,38 @@ const Book = () => {
             <div className="calendar-legend mt-6">
               <div className="legend-item">
                 <div className="legend-dot legend-available"></div>
-                <span className="text-green-700 dark:text-green-300">Available</span>
+                <span 
+                  className="text-green-700 dark:text-green-300"
+                  style={{
+                    color: theme === 'light' ? 'white' : undefined
+                  }}
+                >Available</span>
               </div>
               <div className="legend-item">
                 <div className="legend-dot legend-blocked"></div>
-                <span className="text-red-700 dark:text-red-300">Blocked</span>
+                <span 
+                  className="text-red-700 dark:text-red-300"
+                  style={{
+                    color: theme === 'light' ? 'white' : undefined
+                  }}
+                >Blocked</span>
               </div>
             </div>
           </div>
 
           {/* Booking Section */}
-          <div className="bg-card rounded-lg p-8 border border-border shadow-lg">
-            <h3 className="text-2xl font-semibold text-foreground mb-6 text-center">
+          <div 
+            className="rounded-lg p-8 border border-border shadow-lg"
+            style={{
+              backgroundColor: theme === 'light' ? '#3154cf' : undefined
+            }}
+          >
+            <h3 
+              className="text-2xl font-semibold mb-6 text-center"
+              style={{
+                color: theme === 'light' ? 'white' : undefined
+              }}
+            >
               Your Booking
             </h3>
             
@@ -298,11 +361,25 @@ const Book = () => {
               >
                 {isSelectionValid() ? (
                   <div className="p-6 bg-muted/30 rounded-lg border border-border">
-                    <h4 className="text-xl font-semibold text-foreground mb-4">Booking Summary</h4>
+                    <h4 
+                      className="text-xl font-semibold mb-4"
+                      style={{
+                        color: theme === 'light' ? 'white' : undefined
+                      }}
+                    >Booking Summary</h4>
                     <div className="space-y-3 text-base">
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Check-in:</span>
-                        <span className="font-medium">{checkInDate.toLocaleDateString('en-US', { 
+                        <span 
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >Check-in:</span>
+                        <span 
+                          className="font-medium"
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >{checkInDate.toLocaleDateString('en-US', { 
                           weekday: 'short', 
                           month: 'short', 
                           day: 'numeric', 
@@ -310,8 +387,17 @@ const Book = () => {
                         })}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-muted-foreground">Check-out:</span>
-                        <span className="font-medium">{checkOutDate.toLocaleDateString('en-US', { 
+                        <span 
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >Check-out:</span>
+                        <span 
+                          className="font-medium"
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >{checkOutDate.toLocaleDateString('en-US', { 
                           weekday: 'short', 
                           month: 'short', 
                           day: 'numeric', 
@@ -319,8 +405,17 @@ const Book = () => {
                         })}</span>
                       </div>
                       <div className="flex justify-between items-center border-t border-border pt-3">
-                        <span className="text-muted-foreground">Total Nights:</span>
-                        <span className="font-semibold text-primary text-lg">
+                        <span 
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >Total Nights:</span>
+                        <span 
+                          className="font-semibold text-lg"
+                          style={{
+                            color: theme === 'light' ? 'white' : undefined
+                          }}
+                        >
                           {calculateNights()} night{calculateNights() !== 1 ? 's' : ''}
                         </span>
                       </div>
@@ -414,10 +509,10 @@ const Book = () => {
         }
         
         .react-datepicker__day-name {
-          width: 3rem;
-          height: 2.5rem;
-          line-height: 2.5rem;
-          margin: 0.2rem;
+          width: 2.5rem;
+          height: 2rem;
+          line-height: 2rem;
+          margin: 0.15rem;
         }
         
         /* Available dates - default state */
@@ -426,11 +521,11 @@ const Book = () => {
           border-radius: 6px;
           transition: all 0.2s ease;
           font-weight: 500;
-          width: 3rem;
-          height: 3rem;
-          line-height: 3rem;
-          margin: 0.2rem;
-          font-size: 15px;
+          width: 2.5rem;
+          height: 2.5rem;
+          line-height: 2.5rem;
+          margin: 0.15rem;
+          font-size: 14px;
         }
         
         /* Available dates hover - green */

@@ -2,6 +2,8 @@ import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-scroll'
 import { motion } from 'framer-motion'
 import { FiMoon, FiSun, FiGlobe } from 'react-icons/fi'
+import lightLogo from '../assets/light.png'
+import darkLogo from '../assets/dark.png'
 
 
 
@@ -106,9 +108,15 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
       }`}>
         {/* Sliding background div */}
         <motion.div
-          className={`absolute top-0 h-full w-1/2 rounded-full ${
-            theme === "dark" ? "bg-white" : "bg-slate-950"
-          }`}
+          className="absolute top-0 h-full w-1/2 rounded-full"
+          style={{
+            backgroundColor: theme === "light" ? "#3154cf" : "white",
+            opacity: 1,
+            boxShadow: theme === "dark" 
+              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
+              : "0 0 20px rgba(0, 0, 0, 0.1)",
+            transformPerspective: "1000px"
+          }}
           animate={{
             x: themeSliderPosition.x,
             scale: [1, 1.1, 1],
@@ -129,20 +137,13 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               ? "0 0 30px rgba(255, 255, 255, 0.5)" 
               : "0 0 30px rgba(0, 0, 0, 0.1)"
           }}
-          style={{
-            boxShadow: theme === "dark" 
-              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
-              : "0 0 20px rgba(0, 0, 0, 0.1)",
-            transformPerspective: "1000px"
-          }}
         />
         
         <motion.button
-          className={`${TOGGLE_CLASSES} ${
-            theme === "light" 
-              ? "text-white" 
-              : "text-muted-foreground"
-          }`}
+          className={TOGGLE_CLASSES}
+          style={{
+            color: theme === "light" ? "white" : "white"
+          }}
           onClick={() => onThemeChange("light")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -156,11 +157,10 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
         </motion.button>
         
         <motion.button
-          className={`${TOGGLE_CLASSES} ${
-            theme === "dark" 
-              ? "text-black" 
-              : "text-muted-foreground"
-          }`}
+          className={TOGGLE_CLASSES}
+          style={{
+            color: theme === "dark" ? "black" : "#3154cf"
+          }}
           onClick={() => onThemeChange("dark")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -187,9 +187,15 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
       }`}>
         {/* Sliding background div */}
         <motion.div
-          className={`absolute top-0 h-full w-1/2 rounded-full ${
-            theme === "dark" ? "bg-white" : "bg-slate-950"
-          }`}
+          className="absolute top-0 h-full w-1/2 rounded-full"
+          style={{
+            backgroundColor: theme === "light" ? "#3154cf" : "white",
+            opacity: 1,
+            boxShadow: theme === "dark" 
+              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
+              : "0 0 20px rgba(0, 0, 0, 0.1)",
+            transformPerspective: "1000px"
+          }}
           animate={{
             x: languageSliderPosition.x,
             scale: [1, 1.1, 1],
@@ -210,20 +216,17 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
               ? "0 0 30px rgba(255, 255, 255, 0.5)" 
               : "0 0 30px rgba(0, 0, 0, 0.1)"
           }}
-          style={{
-            boxShadow: theme === "dark" 
-              ? "0 0 20px rgba(255, 255, 255, 0.3)" 
-              : "0 0 20px rgba(0, 0, 0, 0.1)",
-            transformPerspective: "1000px"
-          }}
         />
         
         <motion.button
           className={`${TOGGLE_CLASSES} ${
             language === "EN" 
               ? (theme === "dark" ? "text-black" : "text-white") 
-              : "text-muted-foreground"
+              : ""
           }`}
+          style={{
+            color: language !== "EN" && theme === "light" ? "#3154cf" : undefined
+          }}
           onClick={() => setLanguage("EN")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -240,8 +243,11 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
           className={`${TOGGLE_CLASSES} ${
             language === "ქარ" 
               ? (theme === "dark" ? "text-black" : "text-white") 
-              : "text-muted-foreground"
+              : ""
           }`}
+          style={{
+            color: language !== "ქარ" && theme === "light" ? "#3154cf" : undefined
+          }}
           onClick={() => setLanguage("ქარ")}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -259,12 +265,25 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur-sm p-6 transition-colors duration-300">
+      <header className={`sticky top-0 z-50 w-full backdrop-blur-sm py-2 px-6 transition-colors duration-300 ${
+        theme === 'dark' 
+          ? 'bg-slate-900/90 border-b border-slate-800' 
+          : 'border-b border-gray-200'
+      }`}
+      style={{
+        backgroundColor: theme === 'light' ? '#efdec4' : undefined
+      }}>
         <div className="max-w-7xl mx-auto flex items-center justify-between relative z-10">
           {/* Logo */}
           <div className="flex items-center">
-        
-            <h1 className="text-2xl font-bold text-foreground">Sakhluka</h1>
+            <img 
+              src={theme === 'dark' ? darkLogo : lightLogo} 
+              alt="Sakhluka Logo" 
+              className="h-40 w-40 md:h-24 md:w-24 object-contain"
+              style={{
+                filter: theme === 'light' ? 'brightness(0) saturate(100%) invert(21%) sepia(82%) saturate(2048%) hue-rotate(217deg) brightness(95%) contrast(89%)' : undefined
+              }}
+            />
           </div>
 
           {/* Desktop Navigation */}
@@ -284,8 +303,17 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
                 spyThrottle={scrollConfig.spyThrottle}
                 hashSpy={scrollConfig.hashSpy}
                 saveHashHistory={scrollConfig.saveHashHistory}
-                className="text-muted-foreground hover:text-foreground px-4 py-3 rounded-md text-lg font-semibold transition-all duration-300 hover:bg-accent cursor-pointer transform hover:scale-105"
-                activeClass="text-primary scale-105 font-bold"
+                className={`px-4 py-3 rounded-md text-lg font-semibold transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                  theme === 'dark' 
+                    ? 'text-gray-300 hover:text-white hover:bg-slate-800' 
+                    : 'hover:bg-gray-100'
+                }`}
+                style={{
+                  color: theme === 'light' ? '#3154cf' : undefined
+                }}
+                activeClass={`scale-105 font-bold ${
+                  theme === 'dark' ? 'text-blue-400' : ''
+                }`}
               >
                 {item.label}
               </Link>
@@ -348,8 +376,17 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
                 hashSpy={mobileScrollConfig.hashSpy}
                 saveHashHistory={mobileScrollConfig.saveHashHistory}
                 onClick={closeMenu}
-                className="block px-4 py-3 rounded-md text-xl font-semibold text-foreground hover:text-accent-foreground hover:bg-accent transition-all duration-300 cursor-pointer transform hover:scale-105"
-                activeClass="text-primary scale-105 font-bold"
+                className={`block px-4 py-3 rounded-md text-xl font-semibold transition-all duration-300 cursor-pointer transform hover:scale-105 ${
+                  theme === 'dark' 
+                    ? 'text-foreground hover:text-accent-foreground hover:bg-accent' 
+                    : 'hover:bg-accent'
+                }`}
+                style={{
+                  color: theme === 'light' ? '#3154cf' : undefined
+                }}
+                activeClass={`scale-105 font-bold ${
+                  theme === 'dark' ? 'text-primary' : ''
+                }`}
               >
                 {item.label}
               </Link>
@@ -363,6 +400,18 @@ const Header = ({ theme, onThemeChange }: HeaderProps) => {
           </div>
         </div>
       </header>
+      
+      {/* Custom styles for active states in light theme */}
+      {theme === 'light' && (
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .react-scroll-active-class {
+              color: #3154cf !important;
+              font-weight: bold !important;
+            }
+          `
+        }} />
+      )}
     </>
   )
 }

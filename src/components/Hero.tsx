@@ -1,291 +1,64 @@
-import { ReactLenis } from "lenis/react";
-import {
-  motion,
-  useMotionTemplate,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { FiChevronDown } from "react-icons/fi";
-import { Link } from "react-scroll";
-import { useRef, useEffect, useState } from "react";
-
-// Import all images
-import cov3 from "../assets/cov3.jpg";
-import img1 from "../assets/1.jpg";
-import img2 from "../assets/2.jpg";
-import img3 from "../assets/3.jpg";
-import img5 from "../assets/4.jpg";
-
-export const SmoothScrollHero = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1027);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // For mobile devices, don't use Lenis to avoid scroll conflicts
-  if (isMobile) {
-    return (
-      <div className="bg-background transition-colors duration-300">
-        <Hero />
-        <Schedule />
-      </div>
-    );
-  }
-
-  return (
-    <div className="bg-background transition-colors duration-300">
-      <ReactLenis
-        root
-        options={{
-          lerp: 0.05,
-          syncTouch: true, // Enable touch scrolling
-          touchMultiplier: 2, // Increase touch scroll speed
-          //   infinite: true,
-        }}
-      >
-       
-        <Hero />
-        <Schedule />
-      </ReactLenis>
-    </div>
-  );
-};
-
-
-const SECTION_HEIGHT = 1500;
-const MOBILE_SECTION_HEIGHT = 800;
+import { motion } from "framer-motion";
+import heroImage from "../assets/gallery4.jpg";
 
 const Hero = () => {
   return (
-    <div id="hero" className="relative w-full">
-      {/* Desktop version */}
+    <section id="hero" className="relative h-screen w-full overflow-hidden">
+      {/* Background Image */}
       <div 
-        style={{ height: `calc(${SECTION_HEIGHT}px + 100vh)` }}
-        className="relative w-full hidden md:block"
-      >
-        <CenterImage />
-        <ParallaxImages />
-        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-b from-zinc-950/0 to-zinc-950" />
+        className="absolute inset-0 bg-cover bg-no-repeat"
+        style={{
+          backgroundImage: `url(${heroImage})`,
+          backgroundPosition: 'center 25%',
+        }}
+      />
+      
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/40" />
+      
+      {/* Content */}
+      <div className="relative z-10 flex h-full items-center justify-center px-4">
+        <div className="text-center text-white max-w-4xl mx-auto">
+          <motion.h1
+            initial={{ y: 48, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ ease: "easeInOut", duration: 0.75 }}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6"
+          >
+            Sakhluka in Racha
+          </motion.h1>
+          
+          <motion.p
+            initial={{ y: 48, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
+            className="text-lg md:text-xl lg:text-2xl font-light mb-8 text-gray-200"
+          >
+            Experience the soul of the Caucasus in our mountain cabin
+          </motion.p>
+          
+        
+        </div>
       </div>
-      
-      {/* Mobile version - simplified */}
-      <div
-        style={{ height: `calc(${MOBILE_SECTION_HEIGHT}px + 100vh)` }}
-        className="relative w-full block md:hidden"
-      >
-        <CenterImageMobile />
-        <ParallaxImagesMobile />
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-b from-zinc-950/0 to-zinc-950" />
-      </div>
-      
-      {/* Floating scroll button for mobile */}
-      <FloatingScrollButton />
-    </div>
+    </section>
   );
 };
 
-const CenterImage = () => {
-  const { scrollY } = useScroll();
-
-  const clip1 = useTransform(scrollY, [0, 1500], [25, 0]);
-  const clip2 = useTransform(scrollY, [0, 1500], [75, 100]);
-
-  const clipPath = useMotionTemplate`polygon(${clip1}% ${clip1}%, ${clip2}% ${clip1}%, ${clip2}% ${clip2}%, ${clip1}% ${clip2}%)`;
-
-  const backgroundSize = useTransform(
-    scrollY,
-    [0, SECTION_HEIGHT + 500],
-    ["170%", "100%"]
-  );
-  const opacity = useTransform(
-    scrollY,
-    [SECTION_HEIGHT, SECTION_HEIGHT + 500],
-    [1, 0]
-  );
-
-  return (
-    <motion.div
-      className="sticky top-0 h-screen w-full"
-      style={{
-        clipPath,
-        backgroundSize,
-        opacity,
-        backgroundImage:
-          `url(${cov3})`,
-        backgroundPosition: "cover center",
-        backgroundRepeat: "no-repeat",
-      }}
-    />
-  );
-};
-
-const CenterImageMobile = () => {
-  const { scrollY } = useScroll();
-
-  const clip1 = useTransform(scrollY, [0, 800], [25, 0]);
-  const clip2 = useTransform(scrollY, [0, 800], [75, 100]);
-
-  const clipPath = useMotionTemplate`polygon(${clip1}% ${clip1}%, ${clip2}% ${clip1}%, ${clip2}% ${clip2}%, ${clip1}% ${clip2}%)`;
-
-  const backgroundSize = useTransform(
-    scrollY,
-    [0, MOBILE_SECTION_HEIGHT + 300],
-    ["170%", "100%"]
-  );
-  const opacity = useTransform(
-    scrollY,
-    [MOBILE_SECTION_HEIGHT, MOBILE_SECTION_HEIGHT + 300],
-    [1, 0]
-  );
-
-  return (
-    <motion.div
-      className="sticky top-0 h-screen w-full"
-      style={{
-        clipPath,
-        backgroundSize,
-        opacity,
-        backgroundImage:
-          `url(${cov3})`,
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
-    />
-  );
-};
-
-const ParallaxImages = () => {
-  return (
-    <div className="mx-auto max-w-5xl px-4 pt-[100px] md:pt-[200px]">
-      {/* First image - always visible */}
-      <ParallaxImg
-        src={img1}
-        alt="Mountain cabin view"
-        start={-200}
-        end={200}
-        className="w-full md:w-1/3 mb-8 md:mb-0"
-      />
-      
-      {/* Second image - always visible */}
-      <ParallaxImg
-        src={img2}
-        alt="Racha landscape"
-        start={200}
-        end={-250}
-        className="mx-auto w-full md:w-2/3 mb-8 md:mb-0"
-      />
-      
-      {/* Third and fourth images - hidden on mobile to reduce scroll */}
-      <div className="hidden md:block">
-        <ParallaxImg
-          src={img3}
-          alt="Nature surrounding"
-          start={-200}
-          end={200}
-          className="ml-auto w-1/3"
-        />
-        <ParallaxImg
-          src={img5}
-          alt="Cabin exterior"
-          start={0}
-          end={-500}
-          className="ml-24 w-5/12"
-        />
-      </div>
-    </div>
-  );
-};
-
-const ParallaxImagesMobile = () => {
-  return (
-    <div className="mx-auto max-w-5xl px-4 pt-[100px]">
-      {/* Only show 2 images on mobile to reduce scroll */}
-      <ParallaxImg
-        src={img1}
-        alt="Mountain cabin view"
-        start={-100}
-        end={100}
-        className="w-full mb-6"
-      />
-      
-      <ParallaxImg
-        src={img2}
-        alt="Racha landscape"
-        start={100}
-        end={-100}
-        className="w-full"
-      />
-    </div>
-  );
-};
-
-const ParallaxImg = ({ className, alt, src, start, end }: {
-  className?: string;
-  alt: string;
-  src: string;
-  start: number;
-  end: number;
-}) => {
-  const ref = useRef(null);
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: [`${start}px end`, `end ${end * -1}px`],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0.75, 1], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0.75, 1], [1, 0.85]);
-
-  const y = useTransform(scrollYProgress, [0, 1], [start, end]);
-  const transform = useMotionTemplate`translateY(${y}px) scale(${scale})`;
-
-  return (
-    <motion.img
-      src={src}
-      alt={alt}
-      className={className}
-      ref={ref}
-      style={{ transform, opacity }}
-    />
-  );
-};
-
-const FloatingScrollButton = () => {
-  return (
-    <div className="fixed bottom-6 right-6 z-40 md:hidden">
-      <Link
-        to="about"
-        spy={true}
-        smooth={true}
-        offset={-100}
-        duration={1800}
-        delay={200}
-        className="bg-secondary/90 backdrop-blur-sm text-secondary-foreground border border-border p-4 rounded-full shadow-lg hover:bg-accent hover:text-accent-foreground transition-all duration-300 cursor-pointer flex items-center justify-center"
-      >
-        <FiChevronDown className="w-6 h-6 animate-bounce" />
-      </Link>
-    </div>
-  );
-};
-
-const Schedule = () => {
+// Welcome section that was part of the old Schedule component
+export const WelcomeSection = ({ theme }: { theme?: string }) => {
   return (
     <section
       id="about-cabin"
-      className="mx-auto max-w-5xl px-4 py-16 md:py-48 text-foreground"
+      className="mx-auto max-w-5xl px-4 py-16 md:py-24 text-foreground"
     >
       <motion.h1
         initial={{ y: 48, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ ease: "easeInOut", duration: 0.75 }}
-        className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-foreground text-center"
+        className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-center"
+        style={{
+          color: theme === 'light' ? '#3154cf' : undefined
+        }}
       >
         Welcome to Sakhluka in Racha
       </motion.h1>
@@ -295,7 +68,10 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
-          className="text-base md:text-lg leading-relaxed text-muted-foreground"
+          className="text-base md:text-lg leading-relaxed"
+          style={{
+            color: theme === 'light' ? '#3154cf' : undefined
+          }}
         >
           Nestled in the heart of Racha's majestic mountains, our cabin offers a peaceful retreat surrounded by pristine nature, fresh air, and breathtaking views. Whether you're seeking a quiet getaway or an adventure-filled stay, our cozy cabin is the perfect base.
         </motion.p>
@@ -304,7 +80,10 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.4 }}
-          className="text-base md:text-lg leading-relaxed text-muted-foreground"
+          className="text-base md:text-lg leading-relaxed"
+          style={{
+            color: theme === 'light' ? '#3154cf' : undefined
+          }}
         >
           Wake up to the sound of rustling trees, enjoy coffee with a view, and unwind by the fireplace after a day of exploring Racha's hidden gems. Designed for comfort and simplicity, the cabin blends rustic charm with modern essentials to make your stay unforgettable.
         </motion.p>
@@ -313,7 +92,10 @@ const Schedule = () => {
           initial={{ y: 48, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ ease: "easeInOut", duration: 0.75, delay: 0.6 }}
-          className="text-lg md:text-xl font-semibold text-foreground text-center pt-4 md:pt-8"
+          className="text-lg md:text-xl font-semibold text-center pt-4 md:pt-8"
+          style={{
+            color: theme === 'light' ? '#3154cf' : undefined
+          }}
         >
           Come experience the soul of the Caucasus — calm, clean, and completely yours.
         </motion.p>

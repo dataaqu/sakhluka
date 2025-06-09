@@ -9,9 +9,10 @@ interface CardProps {
   Icon: IconType;
   href: string;
   bgGradient: string;
+  theme?: string;
 }
 
-const Contact = () => {
+const Contact = ({ theme }: { theme?: string }) => {
   return (
     <section className="bg-background py-32">
       <div className="container mx-auto px-4">
@@ -20,18 +21,21 @@ const Contact = () => {
             initial={{ y: 48, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ ease: "easeInOut", duration: 0.75 }}
-            className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-foreground text-center"
+            className="mb-8 md:mb-20 text-2xl md:text-4xl font-black uppercase text-center"
+            style={{
+              color: theme === 'light' ? '#3154cf' : undefined
+            }}
           >
             For booking or detail information contact us
           </motion.h1>
         </div>
-        <HoverDevCards />
+        <HoverDevCards theme={theme} />
       </div>
     </section>
   );
 };
 
-const HoverDevCards = () => {
+const HoverDevCards = ({ theme }: { theme?: string }) => {
   return (
     <div className="flex justify-center items-center">
       <div className="grid gap-10 grid-cols-1 md:grid-cols-3 justify-items-center max-w-4xl">
@@ -46,6 +50,7 @@ const HoverDevCards = () => {
             href="https://facebook.com"
             Icon={FiFacebook}
             bgGradient="from-blue-600 to-blue-700"
+            theme={theme}
           />
         </motion.div>
         <motion.div
@@ -59,6 +64,7 @@ const HoverDevCards = () => {
             href="https://instagram.com"
             Icon={FiInstagram}
             bgGradient="from-purple-600 via-pink-500 to-orange-400"
+            theme={theme}
           />
         </motion.div>
         <motion.div
@@ -72,6 +78,7 @@ const HoverDevCards = () => {
             href="https://airbnb.com"
             Icon={SiAirbnb}
             bgGradient="from-red-500 to-red-600"
+            theme={theme}
           />
         </motion.div>
       </div>
@@ -79,21 +86,40 @@ const HoverDevCards = () => {
   );
 };
 
-const Card = ({ title, subtitle, Icon, href, bgGradient }: CardProps) => {
+const Card = ({ title, subtitle, Icon, href, bgGradient, theme }: CardProps) => {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-44 h-44 p-6 rounded-md border-[1px] border-slate-300 relative overflow-hidden group bg-transparent flex flex-col justify-center items-center text-center"
+      className="w-44 h-44 p-6 rounded-md border-[1px] relative overflow-hidden group flex flex-col justify-center items-center text-center"
+      style={{
+        backgroundColor: theme === 'light' ? '#3154cf' : 'transparent',
+        borderColor: theme === 'light' ? '#3154cf' : undefined
+      }}
     >
       <div className={`absolute inset-0 bg-gradient-to-r ${bgGradient} translate-y-[100%] group-hover:translate-y-[0%] transition-transform duration-300`} />
 
-      <Icon className="absolute z-10 -top-12 -right-12 text-9xl text-slate-100 group-hover:text-white group-hover:rotate-12 transition-transform duration-300" />
-      <h3 className="font-medium text-lg mt-6 text-white group-hover:text-white relative z-10 duration-300 mb-1">
+      <Icon 
+        className="absolute z-10 -top-12 -right-12 text-9xl group-hover:text-white group-hover:rotate-12 transition-transform duration-300"
+        style={{
+          color: theme === 'light' ? 'white' : undefined
+        }}
+      />
+      <h3 
+        className="font-medium text-lg mt-6 group-hover:text-white relative z-10 duration-300 mb-1"
+        style={{
+          color: theme === 'light' ? 'white' : 'white'
+        }}
+      >
         {title}
       </h3>
-      <p className="text-sm text-white group-hover:text-white relative z-10 duration-300">
+      <p 
+        className="text-sm group-hover:text-white relative z-10 duration-300"
+        style={{
+          color: theme === 'light' ? 'white' : 'white'
+        }}
+      >
         {subtitle}
       </p>
     </a>

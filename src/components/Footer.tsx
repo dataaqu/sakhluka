@@ -35,13 +35,18 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
   ]
 
   return (
-    <footer className={`
-      py-12 px-6
-      ${theme === 'dark' 
-        ? 'bg-slate-900 text-white border-t border-slate-800' 
-        : 'bg-white text-gray-900 border-t border-gray-200'
-      }
-    `}>
+    <footer 
+      className={`
+        py-12 px-6 transition-colors duration-300
+        ${theme === 'dark' 
+          ? 'bg-slate-900 text-white border-t border-slate-800' 
+          : 'border-t border-gray-200'
+        }
+      `}
+      style={{
+        backgroundColor: theme === 'light' ? '#efdec4' : undefined
+      }}
+    >
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
           
@@ -52,15 +57,25 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
             transition={{ ease: "easeInOut", duration: 0.75 }}
             className="text-center md:text-left"
           >
-            <h3 className={`text-3xl font-bold ${
-              theme === 'dark' ? 'text-white' : 'text-slate-900'
-            }`}>
+            <h3 
+              className={`text-3xl font-bold ${
+                theme === 'dark' ? 'text-white' : ''
+              }`}
+              style={{
+                color: theme === 'light' ? '#3154cf' : undefined
+              }}
+            >
               Sakhluka
             </h3>
-            <p className={`text-sm ${
-              theme === 'dark' ? 'text-gray-400' : 'text-gray-500'
-            }`}>
-              Mountain Cabin Retreat
+            <p 
+              className={`text-sm ${
+                theme === 'dark' ? 'text-gray-400' : ''
+              }`}
+              style={{
+                color: theme === 'light' ? '#3154cf' : undefined
+              }}
+            >
+              In Racha
             </p>
           </motion.div>
 
@@ -71,9 +86,14 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
             transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
             className="text-center"
           >
-            <p className={`text-base leading-relaxed ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-            }`}>
+            <p 
+              className={`text-base leading-relaxed ${
+                theme === 'dark' ? 'text-gray-300' : ''
+              }`}
+              style={{
+                color: theme === 'light' ? '#3154cf' : undefined
+              }}
+            >
               Experience the beauty and tranquility of Georgian mountains in our cozy cabin. 
               Perfect for a peaceful getaway surrounded by nature's pristine beauty.
             </p>
@@ -103,10 +123,14 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
                       p-2 rounded-lg transition-colors duration-200
                       ${theme === 'dark' 
                         ? 'bg-slate-800 text-gray-300 hover:bg-slate-700' 
-                        : 'bg-white text-gray-600 hover:bg-gray-100'
+                        : 'hover:bg-gray-100'
                       } 
                       ${social.hoverColor}
                     `}
+                    style={{
+                      backgroundColor: theme === 'light' ? '#3154cf' : undefined,
+                      color: theme === 'light' ? 'white' : undefined
+                    }}
                     aria-label={social.name}
                   >
                     <Icon size={20} />
@@ -127,11 +151,16 @@ const Footer: React.FC<FooterProps> = ({ theme }) => {
             mt-8 pt-8 text-center border-t
             ${theme === 'dark' 
               ? 'border-slate-800 text-gray-400' 
-              : 'border-gray-200 text-gray-500'
+              : 'border-gray-200'
             }
           `}
         >
-          <p className="text-sm">
+          <p 
+            className="text-sm"
+            style={{
+              color: theme === 'light' ? '#3154cf' : undefined
+            }}
+          >
             © {currentYear} Sakhluka. All rights reserved.
           </p>
         </motion.div>

@@ -43,7 +43,7 @@ const StickyImage: React.FC<{ imgUrl: string }> = ({ imgUrl }) => {
       style={{
         backgroundImage: `url(${imgUrl})`,
         backgroundSize: "cover",
-        backgroundPosition: "center",
+        backgroundPosition: "center 70%",
         height: `calc(100vh - ${IMG_PADDING * 2}px)`,
         top: IMG_PADDING,
         scale,
@@ -91,7 +91,7 @@ const OverlayCopy: React.FC<{ subheading: string; heading: string }> = ({
   );
 };
 
-const ExampleContent: React.FC = () => (
+const ExampleContent: React.FC<{ theme?: string }> = ({ theme }) => (
   <div className="mx-auto  max-w-5xl  gap-8 px-4 pb-24 pt-12 md:grid-cols-12">
     
     <div className="col-span-1 md:col-span-8">
@@ -99,7 +99,10 @@ const ExampleContent: React.FC = () => (
         initial={{ y: 48, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ ease: "easeInOut", duration: 0.75 }}
-        className="mb-4 text-xl text-muted-foreground md:text-3xl"
+        className="mb-4 text-xl md:text-3xl"
+        style={{
+          color: theme === 'light' ? '#3154cf' : undefined
+        }}
       >
 Surrounded by forest paths, mountain streams, and the quiet rhythm of nature, Sakhluka invites you to truly slow down. Spend your days exploring nearby trails or simply lounging in the sun-drenched yard with a good book. Evenings are perfect for gathering around the outdoor fire, sharing stories, and watching the stars light up the sky.
 
@@ -108,7 +111,10 @@ Surrounded by forest paths, mountain streams, and the quiet rhythm of nature, Sa
         initial={{ y: 48, opacity: 0 }}
         whileInView={{ y: 0, opacity: 1 }}
         transition={{ ease: "easeInOut", duration: 0.75, delay: 0.2 }}
-        className="mb-8 text-xl text-muted-foreground md:text-3xl"
+        className="mb-8 text-xl md:text-3xl"
+        style={{
+          color: theme === 'light' ? '#3154cf' : undefined
+        }}
       >
 Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and make space for peace, comfort, and unforgettable mountain moments.
 
@@ -143,7 +149,7 @@ Let the stillness of Racha renew your spirit. Book your stay at Sakhluka now and
   </div>
 );
 
-const About: React.FC = () => {
+const About: React.FC<{ theme?: string }> = ({ theme }) => {
   return (
     <div id="about" className="bg-background transition-colors duration-300">
       <TextParallaxContent
@@ -151,7 +157,7 @@ const About: React.FC = () => {
         subheading="Discover"
         heading="Sakhluka"
       >
-        <ExampleContent />
+        <ExampleContent theme={theme} />
       </TextParallaxContent>
     </div>
   );
